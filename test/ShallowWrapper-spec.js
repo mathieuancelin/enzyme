@@ -2266,7 +2266,7 @@ describe('shallow', () => {
     });
   });
 
-  describe('.rightEquals()', () => {
+  describe('.matchesElement(node)', () => {
     it('should match on a root node that looks like the rendered one', () => {
       const spy = sinon.spy();
       const wrapper = shallow(
@@ -2274,18 +2274,18 @@ describe('shallow', () => {
           <div onClick={spy} style={{ fontSize: 12, color: 'red' }}>Hello World</div>
         </div>
       ).first();
-      expect(wrapper.rightEquals(<div><div>Hello World</div></div>)).to.equal(true);
-      expect(wrapper.rightEquals(
+      expect(wrapper.matchesElement(<div><div>Hello World</div></div>)).to.equal(true);
+      expect(wrapper.matchesElement(
         <div>
           <div onClick={spy} style={{ fontSize: 12, color: 'red' }}>Hello World</div>
         </div>
       )).to.equal(true);
-      expect(wrapper.rightEquals(
+      expect(wrapper.matchesElement(
         <div>
           <div onClick={spy}>Hello World</div>
         </div>
       )).to.equal(true);
-      expect(wrapper.rightEquals(
+      expect(wrapper.matchesElement(
         <div>
           <div style={{ fontSize: 12, color: 'red' }}>Hello World</div>
         </div>
@@ -2294,7 +2294,7 @@ describe('shallow', () => {
     });
   });
 
-  describe('.rightContains()', () => {
+  describe('.containsMatchingElement(node)', () => {
     it('should match a root node that looks like the rendered one', () => {
       const spy1 = sinon.spy();
       const spy2 = sinon.spy();
@@ -2304,37 +2304,37 @@ describe('shallow', () => {
           <div onClick={spy2} style={{ fontSize: 13, color: 'blue' }}>Goodbye World</div>
         </div>
       );
-      expect(wrapper.rightContains(
+      expect(wrapper.containsMatchingElement(
         <div>
           <div>Hello World</div>
           <div>Goodbye World</div>
         </div>
       )).to.equal(true);
-      expect(wrapper.rightContains(
+      expect(wrapper.containsMatchingElement(
         <div>
           <div onClick={spy1} style={{ fontSize: 12, color: 'red' }}>Hello World</div>
           <div onClick={spy2} style={{ fontSize: 13, color: 'blue' }}>Goodbye World</div>
         </div>
       )).to.equal(true);
-      expect(wrapper.rightContains(
+      expect(wrapper.containsMatchingElement(
         <div>
           <div onClick={spy1}>Hello World</div>
           <div style={{ fontSize: 13, color: 'blue' }}>Goodbye World</div>
         </div>
       )).to.equal(true);
-      expect(wrapper.rightContains(
+      expect(wrapper.containsMatchingElement(
         <div>
           <div style={{ fontSize: 12, color: 'red' }}>Hello World</div>
           <div onClick={spy2}>Goodbye World</div>
         </div>
       )).to.equal(true);
-      expect(wrapper.rightContains(
+      expect(wrapper.containsMatchingElement(
         <div>
           <div>Hello World</div>
           <div onClick={spy2} style={{ fontSize: 13, color: 'blue' }}>Goodbye World</div>
         </div>
       )).to.equal(true);
-      expect(wrapper.rightContains(
+      expect(wrapper.containsMatchingElement(
         <div>
           <div>Hello World</div>
           <div style={{ fontSize: 13, color: 'blue' }}>Goodbye World</div>
@@ -2343,7 +2343,7 @@ describe('shallow', () => {
       expect(spy1.callCount).to.equal(0);
       expect(spy2.callCount).to.equal(0);
     });
-    it('should match on a single node that looks like a rendered on', () => {
+    it('should match on a single node that looks like a rendered one', () => {
       const spy1 = sinon.spy();
       const spy2 = sinon.spy();
       const wrapper = shallow(
@@ -2352,28 +2352,30 @@ describe('shallow', () => {
           <div onClick={spy2} style={{ fontSize: 13, color: 'blue' }}>Goodbye World</div>
         </div>
       );
-      expect(wrapper.rightContains(
+      expect(wrapper.containsMatchingElement(
         <div>Hello World</div>
       )).to.equal(true);
-      expect(wrapper.rightContains(
+      expect(wrapper.containsMatchingElement(
         <div>Goodbye World</div>
       )).to.equal(true);
-      expect(wrapper.rightContains(
+      expect(wrapper.containsMatchingElement(
         <div onClick={spy1} style={{ fontSize: 12, color: 'red' }}>Hello World</div>
       )).to.equal(true);
-      expect(wrapper.rightContains(
+      expect(wrapper.containsMatchingElement(
         <div style={{ fontSize: 12, color: 'red' }}>Hello World</div>
       )).to.equal(true);
-      expect(wrapper.rightContains(
+      expect(wrapper.containsMatchingElement(
         <div onClick={spy2} style={{ fontSize: 13, color: 'blue' }}>Goodbye World</div>
       )).to.equal(true);
-      expect(wrapper.rightContains(
+      expect(wrapper.containsMatchingElement(
         <div onClick={spy2}>Goodbye World</div>
       )).to.equal(true);
       expect(spy1.callCount).to.equal(0);
       expect(spy2.callCount).to.equal(0);
     });
-    it('should match on an array of nodes that looks like some of rendered nodes', () => {
+  });
+  describe('.containsAllMatchingElements(nodes)', () => {
+    it('should match on an array of nodes that all looks like one of rendered nodes', () => {
       const spy1 = sinon.spy();
       const spy2 = sinon.spy();
       const wrapper = shallow(
@@ -2382,35 +2384,35 @@ describe('shallow', () => {
           <div onClick={spy2} style={{ fontSize: 13, color: 'blue' }}>Goodbye World</div>
         </div>
       );
-      expect(wrapper.rightContains([
+      expect(wrapper.containsAllMatchingElements([
         <div>Hello World</div>,
         <div>Goodbye World</div>,
       ])).to.equal(true);
-      expect(wrapper.rightContains([
+      expect(wrapper.containsAllMatchingElements([
         <div onClick={spy1} style={{ fontSize: 12, color: 'red' }}>Hello World</div>,
         <div>Goodbye World</div>,
       ])).to.equal(true);
-      expect(wrapper.rightContains([
+      expect(wrapper.containsAllMatchingElements([
         <div>Hello World</div>,
         <div onClick={spy2} style={{ fontSize: 13, color: 'blue' }}>Goodbye World</div>,
       ])).to.equal(true);
-      expect(wrapper.rightContains([
+      expect(wrapper.containsAllMatchingElements([
         <div onClick={spy1} style={{ fontSize: 12, color: 'red' }}>Hello World</div>,
         <div onClick={spy2} style={{ fontSize: 13, color: 'blue' }}>Goodbye World</div>,
       ])).to.equal(true);
-      expect(wrapper.rightContains([
+      expect(wrapper.containsAllMatchingElements([
         <div onClick={spy1}>Hello World</div>,
         <div onClick={spy2} style={{ fontSize: 13, color: 'blue' }}>Goodbye World</div>,
       ])).to.equal(true);
-      expect(wrapper.rightContains([
+      expect(wrapper.containsAllMatchingElements([
         <div style={{ fontSize: 12, color: 'red' }}>Hello World</div>,
         <div onClick={spy2} style={{ fontSize: 13, color: 'blue' }}>Goodbye World</div>,
       ])).to.equal(true);
-      expect(wrapper.rightContains([
+      expect(wrapper.containsAllMatchingElements([
         <div onClick={spy1} style={{ fontSize: 12, color: 'red' }}>Hello World</div>,
         <div style={{ fontSize: 13, color: 'blue' }}>Goodbye World</div>,
       ])).to.equal(true);
-      expect(wrapper.rightContains([
+      expect(wrapper.containsAllMatchingElements([
         <div onClick={spy1} style={{ fontSize: 12, color: 'red' }}>Hello World</div>,
         <div onClick={spy2}>Goodbye World</div>,
       ])).to.equal(true);
@@ -2419,4 +2421,50 @@ describe('shallow', () => {
     });
   });
 
+  describe('.containsAnyMatchingElements(nodes)', () => {
+    it('should match on an array with at least one node that looks like a rendered nodes', () => {
+      const spy1 = sinon.spy();
+      const spy2 = sinon.spy();
+      const wrapper = shallow(
+        <div>
+          <div onClick={spy1} style={{ fontSize: 12, color: 'red' }}>Hello World</div>
+          <div onClick={spy2} style={{ fontSize: 13, color: 'blue' }}>Goodbye World</div>
+        </div>
+      );
+      expect(wrapper.containsAnyMatchingElements([
+        <div>Bonjour le monde</div>,
+        <div>Goodbye World</div>,
+      ])).to.equal(true);
+      expect(wrapper.containsAnyMatchingElements([
+        <div onClick={spy1} style={{ fontSize: 12, color: 'red' }}>Bonjour le monde</div>,
+        <div>Goodbye World</div>,
+      ])).to.equal(true);
+      expect(wrapper.containsAnyMatchingElements([
+        <div>Bonjour le monde</div>,
+        <div onClick={spy2} style={{ fontSize: 13, color: 'blue' }}>Goodbye World</div>,
+      ])).to.equal(true);
+      expect(wrapper.containsAnyMatchingElements([
+        <div onClick={spy1} style={{ fontSize: 12, color: 'red' }}>Bonjour le monde</div>,
+        <div onClick={spy2} style={{ fontSize: 13, color: 'blue' }}>Goodbye World</div>,
+      ])).to.equal(true);
+      expect(wrapper.containsAnyMatchingElements([
+        <div onClick={spy1}>Bonjour le monde</div>,
+        <div onClick={spy2} style={{ fontSize: 13, color: 'blue' }}>Goodbye World</div>,
+      ])).to.equal(true);
+      expect(wrapper.containsAnyMatchingElements([
+        <div style={{ fontSize: 12, color: 'red' }}>Bonjour le monde</div>,
+        <div onClick={spy2} style={{ fontSize: 13, color: 'blue' }}>Goodbye World</div>,
+      ])).to.equal(true);
+      expect(wrapper.containsAnyMatchingElements([
+        <div onClick={spy1} style={{ fontSize: 12, color: 'red' }}>Bonjour le monde</div>,
+        <div style={{ fontSize: 13, color: 'blue' }}>Goodbye World</div>,
+      ])).to.equal(true);
+      expect(wrapper.containsAnyMatchingElements([
+        <div onClick={spy1} style={{ fontSize: 12, color: 'red' }}>Bonjour le monde</div>,
+        <div onClick={spy2}>Goodbye World</div>,
+      ])).to.equal(true);
+      expect(spy1.callCount).to.equal(0);
+      expect(spy2.callCount).to.equal(0);
+    });
+  });
 });
