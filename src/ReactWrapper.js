@@ -245,6 +245,26 @@ export default class ReactWrapper {
   }
 
   /**
+   * Whether or not a given react element matches the current render tree.
+   * It will determine if the wrapper root node "looks like" the expected
+   * element by checking if all props of the expected element are present
+   * on the wrapper root node and equals to each other.
+   *
+   * Example:
+   * ```
+   * // MyComponent outputs <div class="foo">Hello</div>
+   * const wrapper = mount(<MyComponent />);
+   * expect(wrapper.matchesElement(<div>Hello</div>)).to.equal(true);
+   * ```
+   *
+   * @param {ReactElement} node
+   * @returns {Boolean}
+   */
+  matchesElement(node) {
+    return this.single(() => instEqual(node, this.node, (a, b) => a <= b));
+  }
+
+  /**
    * Whether or not a given react element exists in the mount render tree.
    *
    * Example:
@@ -264,7 +284,7 @@ export default class ReactWrapper {
   }
 
   /**
-   * Whether or not a given react element exists in the shallow render tree.
+   * Whether or not a given react element exists in the current render tree.
    * It will determine if one of the wrappers element "looks like" the expected
    * element by checking if all props of the expected element are present
    * on the wrappers element and equals to each other.
@@ -273,7 +293,7 @@ export default class ReactWrapper {
    * ```
    * // MyComponent outputs <div><div class="foo">Hello</div></div>
    * const wrapper = mount(<MyComponent />);
-   * expect(wrapper.containsMatchingElement(<div>Hello</div>)).to.equal(true);
+   * expect(wrapper.atchingElement(<div>Hello</div>)).to.equal(true);
    * ```
    *
    * @param {ReactElement} node
@@ -285,7 +305,7 @@ export default class ReactWrapper {
   }
 
   /**
-   * Whether or not all the given react elements exists in the shallow render tree.
+   * Whether or not all the given react elements exists in the current render tree.
    * It will determine if one of the wrappers element "looks like" the expected
    * element by checking if all props of the expected element are present
    * on the wrappers element and equals to each other.
@@ -309,7 +329,7 @@ export default class ReactWrapper {
   }
 
   /**
-   * Whether or not one of the given react elements exists in the shallow render tree.
+   * Whether or not one of the given react elements exists in the current render tree.
    * It will determine if one of the wrappers element "looks like" the expected
    * element by checking if all props of the expected element are present
    * on the wrappers element and equals to each other.
